@@ -9,4 +9,19 @@
 
 # Make sure your secret_key_base is kept private
 # if you're sharing your code publicly.
-Rb2hoge::Application.config.secret_key_base = '8a684a8c21922cc872f8589282eff8f3e6f2b914be4a8ca444002df3c3e86becfe0bd5a85273ee17ba01745c49762851a6b0746340a8420b9f0d28ade2069d9b'
+require 'securerandom'
+
+def secure_token
+	token_file = Rails.root.join('.secret')
+	if File.exist?(token_file)
+		#Use the existing token.
+		File.read(token_file).chomp
+	else
+		#Generate a new token and store it in token_file.
+		token = SecureRondom.hex(64)
+		File.write(token_file, token)
+		token
+	end
+end
+
+SampleApp::Aplication.config.secret_key_base = securet_token
